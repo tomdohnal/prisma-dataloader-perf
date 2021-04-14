@@ -26,7 +26,6 @@ async function run() {
   await Promise.all(
     accounts.map((account) => accountByIdLoader.load(account.id))
   );
-  console.log(accountsDataloader.length);
   console.timeEnd("using dataloader");
 
   await prisma.$disconnect();
