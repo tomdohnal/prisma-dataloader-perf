@@ -1,0 +1,17 @@
+{
+  "name": "prisma-n-plus-one",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tom Dohnal",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "prisma": "2.21.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@prisma/client": "2.21.0",
+    "dataloader": "^2.0.0"
+  }
+}
