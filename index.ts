@@ -14,19 +14,33 @@ async function run() {
 
   const accounts = await prisma.account.findMany();
 
-  console.time("NOT using dataloader");
+  console.time("multiple `prisma.findFirst(...)` calls");
+  await Promise.all(
+    accounts.map((account) =>
+      prisma.account.findFirst({ where: { id: account.id } })
+    )
+  );
+  console.timeEnd("multiple `prisma.findFirst(...)` calls");
+
+  console.time("multiple `prisma.findUnique(...)` calls");
   await Promise.all(
     accounts.map((account) =>
       prisma.account.findUnique({ where: { id: account.id } })
     )
   );
-  console.timeEnd("NOT using dataloader");
+  console.timeEnd("multiple `prisma.findUnique(...)` calls");
 
-  console.time("using dataloader");
+  console.time("using DataLoader");
   await Promise.all(
     accounts.map((account) => accountByIdLoader.load(account.id))
   );
-  console.timeEnd("using dataloader");
+  console.timeEnd("using DataLoader");
+
+  console.time("`prisma.findMany(...)`");
+  await prisma.account.findMany({
+    where: { id: { in: accounts.map((account) => account.id) } },
+  });
+  console.timeEnd("`prisma.findMany(...)`");
 
   await prisma.$disconnect();
 }
